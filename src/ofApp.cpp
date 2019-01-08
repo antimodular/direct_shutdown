@@ -3,7 +3,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-
+    
     version = "direct_shutdown v17";
     ofLog()<<"version "<<version;
     ofLog()<<"remember to disable the sleep option via terminal script";
@@ -11,7 +11,7 @@ void ofApp::setup(){
     ofLog()<<"";
     
     button_object.setup();
-   
+    
     //---------visuals
     ofSetCircleResolution(50);
     //ofEnableSmoothing();
@@ -35,6 +35,7 @@ void ofApp::setup(){
     ofBuffer buffer = ofBufferFromFile("otherAppsToExit.txt");
     ofLog()<<"in otherAppsToExit.txt we are looking for";
     ofLog()<<"apps to be closed upon shutdown: ";
+    //sometimes apps blow the shutdown process. so it's good to exit them before.
     if(buffer.size()) {
         
         for (ofBuffer::Line it = buffer.getLines().begin(), end = buffer.getLines().end(); it != end; ++it) {
@@ -47,11 +48,12 @@ void ofApp::setup(){
             }
         }
     }
-       ofLog()<<"";
+    ofLog()<<"";
     
     //-------serial
+    //communicate to Hitachi projector to turn on or off
     serial.listDevices();
-
+    
     getSerialDevice();
     myBaud = 9600; //57600; //115200;
     ofLog()<<"serialID "<<serialID<<" , myBaud "<<myBaud;
@@ -60,8 +62,8 @@ void ofApp::setup(){
     projectorPrintInfo();
     projectorsON();
     
-       ofLog()<<"";
-       ofLog()<<"setup done";
+    ofLog()<<"";
+    ofLog()<<"setup done";
 }
 
 void ofApp::exit(){
@@ -97,8 +99,8 @@ void ofApp::update(){
     
     if(bShutdownStarted == true){
         if(stage == 0 && ofGetElapsedTimef() - stageTimer > stageDuration){
-//            std::cout << "\007";
-             ofSystem("osascript -e 'beep'");
+            //            std::cout << "\007";
+            ofSystem("osascript -e 'beep'");
             stageTimer = ofGetElapsedTimef();
             stageDuration = 1;
             stage++;
@@ -116,7 +118,7 @@ void ofApp::update(){
             stage++;
         }
         if(stage == 3 && ofGetElapsedTimef() - stageTimer > stageDuration){
-                   ofSystem("osascript -e 'beep'");
+            ofSystem("osascript -e 'beep'");
             ofSystem(shutdonwScript);
             stageTimer = ofGetElapsedTimef();
             stageDuration = 3;
@@ -154,20 +156,20 @@ void ofApp::draw(){
     /*
      //draw wave when also monitoring if power cable gets unplugged
      //new code does isnot yet able to monitor this
-    float tW = 10;
-    float tH = 10;
-    float hOffest = 15;
-    
-    float x0 = diam/2-tW;
-    float y0 = diam/2+hOffest+1;
-    float x1 = diam/2;
-    float y1 = diam/2+hOffest-tH;
-    float x2 = diam/2;
-    float y2 = diam/2+hOffest+tH;
-    float x3 = diam/2+tW;
-    float y3 = diam/2+hOffest-1;
-    
-    
+     float tW = 10;
+     float tH = 10;
+     float hOffest = 15;
+     
+     float x0 = diam/2-tW;
+     float y0 = diam/2+hOffest+1;
+     float x1 = diam/2;
+     float y1 = diam/2+hOffest-tH;
+     float x2 = diam/2;
+     float y2 = diam/2+hOffest+tH;
+     float x3 = diam/2+tW;
+     float y3 = diam/2+hOffest-1;
+     
+     
      ofNoFill();
      ofSetLineWidth(2);
      ofBeginShape();
@@ -180,7 +182,7 @@ void ofApp::draw(){
     ofPopMatrix();
     
     float xx = (ofGetElapsedTimeMillis()/10) % ofGetWidth();
-
+    
     ofDrawLine(xx, ofGetHeight()-10, xx, ofGetHeight());
     
     ofSetColor(textColor, textColor, textColor);
@@ -194,14 +196,14 @@ void ofApp::draw(){
     
     //ofDrawBitmapString("power cord unplugged",12,185);
     
-//    ofDrawBitmapString(ofToString(ofGetFrameNum()),12,185);
+    //    ofDrawBitmapString(ofToString(ofGetFrameNum()),12,185);
 }
 
 
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    
 }
 
 //--------------------------------------------------------------
@@ -220,47 +222,47 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseEntered(int x, int y){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseExited(int x, int y){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::gotMessage(ofMessage msg){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
+    
 }
 
 void ofApp::projectorPrintInfo(){

@@ -3,7 +3,7 @@
 //  BootManager
 //
 //  Created by Akira on 4/7/15.
-//
+//  modified by Stephan on 7/1/2019
 //
 //https://gist.github.com/Akira-Hayasaka/863ff80c2d95c7ca1572
 
@@ -12,16 +12,14 @@
 
 
 #include "ofMain.h"
-//#include "ofApp.h"
-
 
 //static const string shutdonwScript = "osascript -e \'tell app \"System Events\" to shut down\'";
 
 //https://ss64.com/osx/shutdown.html
 //static const string shutdonwScript = "osascript -e 'do shell script \"sudo /sbin/shutdown -h now\"'";
 static const string shutdonwScript = "osascript -e 'do shell script \"sudo /sbin/shutdown -h +1\"'";
-static bool bButtonPressed;
 
+static bool bButtonPressed;
 
 static void onPwrBtnPressed(CFNotificationCenterRef center,
                             void *observer,
@@ -29,9 +27,6 @@ static void onPwrBtnPressed(CFNotificationCenterRef center,
                             const void *object,
                             CFDictionaryRef userInfo)
 {
-//    ofApp *app = (ofApp*)ofGetAppPtr();
-//    //        app->exitOtherApps();
-//    app->projectorsOFF();
     
             bButtonPressed = true;
     ofLog() << "Power Button Pressed";
