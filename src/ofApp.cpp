@@ -61,6 +61,8 @@ void ofApp::setup(){
     
     projectorPrintInfo();
     projectorsON();
+ 
+    old_bButtonPressed = false;
     
     ofLog()<<"";
     ofLog()<<"setup done";
@@ -68,7 +70,7 @@ void ofApp::setup(){
 
 void ofApp::exit(){
     ofLog()<<"exit in ofApp";
-    button_object.exit();
+//    button_object.exit();
 }
 
 void ofApp::exitOtherApps(){
@@ -87,38 +89,63 @@ void ofApp::update(){
     
     ofSetWindowTitle(version);
     
-    if(bButtonPressed == true){
-        bButtonPressed = false;
-        bShutdownStarted = true;
-        
-        stage = 0;
-        stageDuration = 1;
-        
-        projectorsOFF();
+    
+    button_object.update();
+    
+    bButtonPressed = button_object.getButtonPressed();
+      
+    if(old_bButtonPressed != bButtonPressed){
+        old_bButtonPressed = bButtonPressed;
+        if(bButtonPressed == true){
+        ofLog()<<"listener bButtonPressed == true";
+    bShutdownStarted = true;
+
+    stage = 0;
+    stageDuration = 1;
+
+    projectorsOFF();
     }
+    }
+    
+//    if(bButtonPressed == true){
+//        bButtonPressed = false;
+//        bShutdownStarted = true;
+//
+//        stage = 0;
+//        stageDuration = 1;
+//
+//        projectorsOFF();
+//    }
     
     if(bShutdownStarted == true){
         if(stage == 0 && ofGetElapsedTimef() - stageTimer > stageDuration){
             //            std::cout << "\007";
+            ofLog()<<"stage == 0";
             ofSystem("osascript -e 'beep'");
             stageTimer = ofGetElapsedTimef();
             stageDuration = 1;
             stage++;
         }
         if(stage == 1 && ofGetElapsedTimef() - stageTimer > stageDuration){
+            ofLog()<<"stage == 1";
             ofSystem("osascript -e 'beep'");
+            exitOtherApps();
             stageTimer = ofGetElapsedTimef();
             stageDuration = 1;
             stage++;
         }
         if(stage == 2 && ofGetElapsedTimef() - stageTimer > stageDuration){
+            ofLog()<<"stage == 2";
+            ofSystem("osascript -e 'beep'");
             projectorsOFF();
             stageTimer = ofGetElapsedTimef();
             stageDuration = 3;
             stage++;
         }
         if(stage == 3 && ofGetElapsedTimef() - stageTimer > stageDuration){
+            ofLog()<<"stage == 3";
             ofSystem("osascript -e 'beep'");
+            ofLog()<<"call shutdonwScript";
             ofSystem(shutdonwScript);
             stageTimer = ofGetElapsedTimef();
             stageDuration = 3;
@@ -131,6 +158,8 @@ void ofApp::update(){
 void ofApp::draw(){
     
     int diam = 60;
+    
+    
     
     ofPushMatrix();
     ofTranslate(200/2-diam/2, 200/2-50, 0);
@@ -151,6 +180,8 @@ void ofApp::draw(){
     ofDrawRectangle(diam/2, diam/2-40, 1, 25);
     
     ofDrawBitmapString("tx/rx", diam/2-20, diam/2+4);
+    
+   
     //ofDrawBitmapString("~", diam/2-20, diam/2+14);
     
     /*
@@ -181,8 +212,9 @@ void ofApp::draw(){
     
     ofPopMatrix();
     
-    float xx = (ofGetElapsedTimeMillis()/10) % ofGetWidth();
-    
+    auto threadFrame = button_object.getThreadFrameNum();
+//    float xx = (ofGetElapsedTimeMillis()/10) % ofGetWidth();
+    float xx = ofMap(threadFrame%300,0,300,0,ofGetWidth());
     ofDrawLine(xx, ofGetHeight()-10, xx, ofGetHeight());
     
     ofSetColor(textColor, textColor, textColor);
@@ -194,9 +226,10 @@ void ofApp::draw(){
         ofDrawBitmapString(otherAppNames[i],12,190+((i+1)*15));
     }
     
-    //ofDrawBitmapString("power cord unplugged",12,185);
+   
+//    ofDrawBitmapString("f"+ofToString(threadFrame), diam/2-20, ofGetHeight() - 20);
     
-    //    ofDrawBitmapString(ofToString(ofGetFrameNum()),12,185);
+    //ofDrawBitmapString("power cord unplugged",12,185);
 }
 
 

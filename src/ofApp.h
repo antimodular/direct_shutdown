@@ -26,6 +26,9 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
+    ofParameter<bool> bButtonPressed;
+    bool old_bButtonPressed;
+       
     //
     PowerButtonDetector button_object;
     string version;
